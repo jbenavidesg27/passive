@@ -1,0 +1,106 @@
+{
+	"info": {
+		"_postman_id": "e34c8819-7d27-4535-ba9c-f62d1db12b53",
+		"name": "Test Passive",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21908330"
+	},
+	"item": [
+		{
+			"name": "Save",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"flagSavings\":\"true\",\r\n    \"flagCurrent\":\"false\",\r\n    \"accountSavings\":{\r\n        \"maxMovement\":\"20\",\r\n        \"movement\":0,\r\n        \"description\":\"Cuenta de Ahorro\",\r\n        \"account\":1500.00,\r\n        \"dateTransaction\":\"2022-07-25\",\r\n        \"transactions\":[\r\n            {\r\n                \"typeTransaction\":\"1\",\r\n                \"account\":1500.00,\r\n                \"dateTransaction\":\"2022-07-25\"\r\n            }\r\n            ],\r\n            \"client\":{\r\n                \"id\":\"62dcd61764852123532ecf40\"\r\n            }\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/passive",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"passive"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FindAll",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/passive",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"passive"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FindById",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/passive/62df29dcdbe2e77a8fc62ec2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"passive",
+						"62df29dcdbe2e77a8fc62ec2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"flagSavings\":\"true\",\r\n    \"flagCurrent\":\"false\",\r\n    \"accountSavings\":{\r\n        \"maxMovement\":\"20\",\r\n        \"movement\":0,\r\n        \"description\":\"Cuenta de Ahorro\",\r\n        \"account\":500.00,\r\n        \"dateTransaction\":\"2022-07-25\",\r\n        \"transactions\":[\r\n            {\r\n                \"typeTransaction\":\"1\",\r\n                \"account\":500.00,\r\n                \"dateTransaction\":\"2022-07-25\"\r\n            }\r\n            ],\r\n            \"client\":{\r\n                \"id\":\"62dcd61764852123532ecf40\"\r\n            }\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/passive/62df29dcdbe2e77a8fc62ec2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"passive",
+						"62df29dcdbe2e77a8fc62ec2"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
