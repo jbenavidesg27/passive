@@ -3,8 +3,6 @@ package com.nttdata.bootcamp.passive.model;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import org.springframework.data.annotation.Id;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.AllArgsConstructor;
@@ -15,10 +13,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class AccountGeneric {
-	@Id
-	String id;
-	private String description;
+public class Transaction {
+	private String typeTransaction;
 	private BigDecimal account;
 	private Date dateTransaction;
 
