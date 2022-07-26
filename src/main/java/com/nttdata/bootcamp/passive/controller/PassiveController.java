@@ -100,7 +100,8 @@ public class PassiveController {
 					savings.getTransactions().stream().forEach(p -> {
 						transactions.add(p);
 					});
-					transactions.add(ps.getAccountCurrent().getTransactions().get(0));
+					transactions.add(ps.getAccountSavings().getTransactions().get(0));
+					savings.setTransactions(transactions);
 					bd.setAccountSavings(savings);
 				} else {
 					new ResponseEntity<>(HttpStatus.NO_CONTENT);
