@@ -1,9 +1,6 @@
 package com.nttdata.bootcamp.passive.controller;
 
-import java.math.BigDecimal;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +16,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nttdata.bootcamp.passive.model.AccountCurrent;
-import com.nttdata.bootcamp.passive.model.AccountSavings;
 import com.nttdata.bootcamp.passive.model.Passive;
-import com.nttdata.bootcamp.passive.model.Transaction;
 import com.nttdata.bootcamp.passive.service.IPassiveService;
 import com.nttdata.bootcamp.passive.util.Constantes;
+import com.nttdata.bootcamp.passive.validator.ValidatorPassive;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -34,6 +29,9 @@ import reactor.core.publisher.Mono;
 public class PassiveController {
 	@Autowired
 	IPassiveService passiveService;
+	
+//	@Autowired
+//	ValidatorPassive validatorPassive;
 	
 	@GetMapping
 	public Mono<ResponseEntity<Flux<Passive>>>  findAll(){
@@ -53,7 +51,26 @@ public class PassiveController {
 	
 	@PostMapping
 	public Mono<ResponseEntity<Passive>> save(@RequestBody Passive passive, final ServerHttpRequest req){
-		return passiveService.save(passive)
+		return Mono.just(passive)
+				.flatMap(p -> {
+					
+					if(p.getClient().getDocuments().getDocumentType().equals(Constantes.TYPE_RUC)) {
+						if(Objects.nonNull(p.getAccountCurrent())) {
+							p.setAccountCurrent(p.getAccountCurrent());
+						}									
+					}else if (p.getClient().getDocuments().getDocumentType().equals(Constantes.TYPE_DNI)) {
+						if(Objects.nonNull(p.getAccountCurrent())) {
+							p.setAccountCurrent(p.getAccountCurrent());
+						}else if (Objects.nonNull(p.getAccountSavings())) {
+							p.setAccountSavings(p.getAccountSavings());								
+						}else {
+							p.setFixedTerm(p.getFixedTerm());
+						}
+						
+					}			
+					return Mono.just(p);					
+					})
+				.flatMap(passiveService::save)				
 				.map( p -> ResponseEntity.created(URI.create(req.getURI().toString().concat("/").concat(p.getId())))
 						.contentType(MediaType.APPLICATION_JSON)
 						.body(p));
@@ -64,52 +81,10 @@ public class PassiveController {
 		Mono<Passive> monoBody = Mono.just(passive);
 		Mono<Passive> monoBD = passiveService.findById(id);
 		return monoBD.zipWith(monoBody, (bd, ps) -> {
-					BigDecimal monto;	
-					List<Transaction> transactions =  new ArrayList<>();
-			if (Objects.nonNull(bd.getAccountCurrent())) {
-				if (Boolean.TRUE.equals(bd.getFlagCurrent()) && Objects.nonNull(ps.getAccountCurrent())) {
-					AccountCurrent current = new AccountCurrent();
-					current = bd.getAccountCurrent();
-					if (ps.getAccountCurrent().getTransactions().get(0).getTypeTransaction()
-							.equals(Constantes.DEPOSITO)) {
-						monto = current.getAccount().add(ps.getAccountCurrent().getAccount());
-						current.setAccount(monto);
-					} else {
-						monto = current.getAccount().subtract(ps.getAccountCurrent().getAccount());
-						current.setAccount(monto);
-					}
-					current.getTransactions().stream().forEach(p -> {
-						transactions.add(p);
-					});
-					transactions.add(ps.getAccountCurrent().getTransactions().get(0));
-					bd.setAccountCurrent(current);
-				}
-			}
-			if (Objects.nonNull(bd.getAccountSavings())) {
-				if (Boolean.TRUE.equals(bd.getFlagSavings()) && Objects.nonNull(ps.getAccountSavings())) {
-					AccountSavings savings = new AccountSavings();
-					savings = bd.getAccountSavings();
-					if (ps.getAccountSavings().getTransactions().get(0).getTypeTransaction()
-							.equals(Constantes.DEPOSITO)) {
-						monto = savings.getAccount().add(ps.getAccountSavings().getAccount());
-						savings.setAccount(monto);
-					} else {
-						monto = savings.getAccount().subtract(ps.getAccountSavings().getAccount());
-						savings.setAccount(monto);
-					}
-					savings.getTransactions().stream().forEach(p -> {
-						transactions.add(p);
-					});
-					transactions.add(ps.getAccountSavings().getTransactions().get(0));
-					savings.setTransactions(transactions);
-					bd.setAccountSavings(savings);
-				} else {
-					new ResponseEntity<>(HttpStatus.NO_CONTENT);
-				}
-			}
-					bd.setId(id);
-					return bd;
-				})
+			bd = ValidatorPassive.validatePassive(bd, ps);
+			bd.setId(id);
+			return bd;
+		})
 				.flatMap(passiveService::update)
 				.map(y -> ResponseEntity.ok()
 						.contentType(MediaType.APPLICATION_JSON).

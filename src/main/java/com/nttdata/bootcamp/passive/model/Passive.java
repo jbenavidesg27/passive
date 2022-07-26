@@ -6,7 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.nttdata.bootcamp.passive.model.dto.ClientDto;
+import com.nttdata.bootcamp.passive.model.dto.Client;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,13 +24,13 @@ public class Passive {
 	
 	private Boolean flagCurrent;
 	
-	private AccountCurrent accountCurrent;
+	private List<AccountCurrent> accountCurrent;
 	
 	private AccountSavings accountSavings;
 	
-	private List<FixedTerm> fixedTerm;
+	private FixedTerm fixedTerm;
 	
-	private ClientDto client;
+	private Client client;
 	
 
 }
