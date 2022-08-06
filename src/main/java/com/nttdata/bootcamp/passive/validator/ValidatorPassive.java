@@ -5,79 +5,77 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import com.nttdata.bootcamp.passive.model.AccountCurrent;
-import com.nttdata.bootcamp.passive.model.AccountSavings;
 import com.nttdata.bootcamp.passive.model.Passive;
 import com.nttdata.bootcamp.passive.model.Transaction;
 import com.nttdata.bootcamp.passive.util.Constantes;
 
+
 public class ValidatorPassive {
 	
+	
+	
+	private ValidatorPassive() {
+		
+	}
+
 	public static Passive validatePassive(Passive bd, Passive ps) {
-		BigDecimal monto;
+		
 		List<Transaction> transactions = new ArrayList<>();
 		if (Objects.nonNull(ps.getAccountCurrent())) {
-			if (bd.getClient().getDocuments().getDocumentType().equals(Constantes.TYPE_DNI)) {
-				if (Boolean.TRUE.equals(bd.getFlagCurrent()) && Objects.nonNull(ps.getAccountCurrent())) {
-					AccountCurrent current = new AccountCurrent();
-					List<AccountCurrent> currents = new ArrayList<>();
-					current = bd.getAccountCurrent().get(0);
-					if (ps.getAccountCurrent().get(0).getTransactions().get(0).getTypeTransaction()
-							.equals(Constantes.DEPOSITO)) {
-						monto = current.getAccount().add(ps.getAccountCurrent().get(0).getAccount());
-						current.setAccount(monto);
-					} else {
-						monto = current.getAccount().subtract(ps.getAccountCurrent().get(0).getAccount());
-						current.setAccount(monto);
-					}
-					current.getTransactions().stream().forEach(p -> {
-						transactions.add(p);
-					});
-					transactions.add(ps.getAccountCurrent().get(0).getTransactions().get(0));
-					currents.add(current);
-					bd.setAccountCurrent(currents);
-					bd.setClient(bd.getClient());
-				} else {
-					bd.setAccountCurrent(ps.getAccountCurrent());
-					bd.setClient(bd.getClient());
-					bd.setFlagCurrent(ps.getFlagCurrent());
-				}
+			if (bd.getClient().getDocuments().getDocumentType().equals(Constantes.TYPE_DNI)
+					&& Boolean.TRUE.equals(bd.getFlagCurrent())) {
+				Passive bdAccountCurrent = validateMontoAccountCurrent(bd,ps);
+				bdAccountCurrent.getAccountCurrent().get(0).getTransactions().stream().forEach(p -> transactions.add(p));
+				transactions.add(ps.getAccountCurrent().get(0).getTransactions().get(0));
+				bdAccountCurrent.getAccountCurrent().get(0).setTransactions(transactions);
+				bd.setAccountCurrent(bdAccountCurrent.getAccountCurrent());
+				bd.setClient(bd.getClient());
 			} else {
 				bd.setAccountCurrent(ps.getAccountCurrent());
 				bd.setClient(bd.getClient());
+				bd.setFlagCurrent(ps.getFlagCurrent());
 			}
-		}
-		if (Objects.nonNull(ps.getAccountSavings())) {
-			if (bd.getClient().getDocuments().getDocumentType().equals(Constantes.TYPE_DNI)) {
-				if (Boolean.TRUE.equals(bd.getFlagSavings()) && Objects.nonNull(ps.getAccountSavings())) {
-					AccountSavings savings = new AccountSavings();
-					savings = bd.getAccountSavings();
-					if (ps.getAccountSavings().getTransactions().get(0).getTypeTransaction()
-							.equals(Constantes.DEPOSITO)) {
-						monto = savings.getAccount().add(ps.getAccountSavings().getAccount());
-						savings.setAccount(monto);
-					} else {
-						monto = savings.getAccount().subtract(ps.getAccountSavings().getAccount());
-						savings.setAccount(monto);
-					}
-					savings.getTransactions().stream().forEach(p -> {
-						transactions.add(p);
-					});
-					transactions.add(ps.getAccountSavings().getTransactions().get(0));
-					savings.setTransactions(transactions);
-					bd.setAccountSavings(savings);
-					bd.setClient(bd.getClient());
-				} else {
-					bd.setAccountSavings(ps.getAccountSavings());
-					bd.setClient(bd.getClient());
-					bd.setFlagSavings(ps.getFlagSavings());
-				}
+		} else {
+			if (bd.getClient().getDocuments().getDocumentType().equals(Constantes.TYPE_DNI)
+					&& Boolean.TRUE.equals(bd.getFlagSavings())) {
+				Passive bdAccountSavings = validateMontoAccountSavings(bd,ps);				
+				bdAccountSavings.getAccountSavings().getTransactions().stream().forEach(p -> transactions.add(p));
+				transactions.add(ps.getAccountSavings().getTransactions().get(0));
+				bdAccountSavings.getAccountSavings().setTransactions(transactions);
+				bd.setAccountSavings(bdAccountSavings.getAccountSavings());
+				bd.setClient(bd.getClient());
+			} else {
+				bd.setAccountSavings(ps.getAccountSavings());
+				bd.setClient(bd.getClient());
+				bd.setFlagSavings(ps.getFlagSavings());
 			}
-		}
-		
-		
+		}				
 		return bd;
-
+	}
+	
+	public static Passive validateMontoAccountCurrent(Passive bd,Passive ps) {
+		BigDecimal montoAccountCurrent;
+		if (ps.getAccountCurrent().get(0).getTransactions().get(0).getTypeTransaction()
+				.equals(Constantes.DEPOSITO)) {
+			montoAccountCurrent = bd.getAccountCurrent().get(0).getAccount().add(ps.getAccountCurrent().get(0).getAccount());// Noncompliant
+			bd.getAccountCurrent().get(0).setAccount(montoAccountCurrent);
+		} else {
+			montoAccountCurrent = bd.getAccountCurrent().get(0).getAccount().subtract(ps.getAccountCurrent().get(0).getAccount());// Noncompliant
+			bd.getAccountCurrent().get(0).setAccount(montoAccountCurrent);
+		}		
+		return bd;	
+	}
+	
+	public static Passive validateMontoAccountSavings(Passive bd,Passive ps) {
+		BigDecimal montoAccountSaving;
+		if (ps.getAccountSavings().getTransactions().get(0).getTypeTransaction().equals(Constantes.DEPOSITO)) {
+			montoAccountSaving = bd.getAccountSavings().getAccount().add(ps.getAccountSavings().getAccount());// Noncompliant
+			bd.getAccountSavings().setAccount(montoAccountSaving);
+		} else {
+			montoAccountSaving = bd.getAccountSavings().getAccount().subtract(ps.getAccountSavings().getAccount());// Noncompliant
+			bd.getAccountSavings().setAccount(montoAccountSaving);
+		}
+		return bd;
 	}
 
 }

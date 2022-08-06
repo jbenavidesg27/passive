@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 public class Address {
 	
 	
-	private String address;
+	private String nameAddress;
 
 }

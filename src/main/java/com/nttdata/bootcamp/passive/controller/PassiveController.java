@@ -3,6 +3,7 @@ package com.nttdata.bootcamp.passive.controller;
 import java.net.URI;
 import java.util.Objects;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nttdata.bootcamp.passive.model.Passive;
+import com.nttdata.bootcamp.passive.model.dto.PassiveDTO;
 import com.nttdata.bootcamp.passive.service.IPassiveService;
 import com.nttdata.bootcamp.passive.util.Constantes;
 import com.nttdata.bootcamp.passive.validator.ValidatorPassive;
@@ -29,9 +31,6 @@ import reactor.core.publisher.Mono;
 public class PassiveController {
 	@Autowired
 	IPassiveService passiveService;
-	
-//	@Autowired
-//	ValidatorPassive validatorPassive;
 	
 	@GetMapping
 	public Mono<ResponseEntity<Flux<Passive>>>  findAll(){
@@ -50,8 +49,10 @@ public class PassiveController {
 	}
 	
 	@PostMapping
-	public Mono<ResponseEntity<Passive>> save(@RequestBody Passive passive, final ServerHttpRequest req){
-		return Mono.just(passive)
+	public Mono<ResponseEntity<Passive>> save(@RequestBody PassiveDTO passive, final ServerHttpRequest req){
+		ModelMapper mapper = new ModelMapper();
+		Passive passiveModel = mapper.map(passive, Passive.class);
+		return Mono.just(passiveModel)
 				.flatMap(p -> {
 					
 					if(p.getClient().getDocuments().getDocumentType().equals(Constantes.TYPE_RUC)) {
@@ -77,8 +78,10 @@ public class PassiveController {
 	}
 	
 	@PutMapping("/{id}")
-	public Mono<ResponseEntity<Passive>> update(@PathVariable("id") String id,@RequestBody Passive passive){
-		Mono<Passive> monoBody = Mono.just(passive);
+	public Mono<ResponseEntity<Passive>> update(@PathVariable("id") String id,@RequestBody PassiveDTO passive){
+		ModelMapper mapper = new ModelMapper();
+		Passive passiveModel = mapper.map(passive, Passive.class);
+		Mono<Passive> monoBody = Mono.just(passiveModel);
 		Mono<Passive> monoBD = passiveService.findById(id);
 		return monoBD.zipWith(monoBody, (bd, ps) -> {
 			bd = ValidatorPassive.validatePassive(bd, ps);
