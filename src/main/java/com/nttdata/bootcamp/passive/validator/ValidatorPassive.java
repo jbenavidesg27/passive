@@ -1,14 +1,22 @@
 package com.nttdata.bootcamp.passive.validator;
 
+
+import com.nttdata.bootcamp.passive.model.AccountCurrent;
+import com.nttdata.bootcamp.passive.model.AccountSavings;
+import com.nttdata.bootcamp.passive.model.Passive;
+import com.nttdata.bootcamp.passive.model.Transaction;
+import com.nttdata.bootcamp.passive.util.Constantes;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import com.nttdata.bootcamp.passive.model.Passive;
-import com.nttdata.bootcamp.passive.model.Transaction;
-import com.nttdata.bootcamp.passive.util.Constantes;
 
+
+/**
+ * Validar Passive.
+ *
+ */
 
 public class ValidatorPassive {
 	
@@ -17,7 +25,10 @@ public class ValidatorPassive {
 	private ValidatorPassive() {
 		
 	}
-
+	 /**
+	   * Validación de Passive.
+	   * 
+	 */
 	public static Passive validatePassive(Passive bd, Passive ps) {
 		
 		List<Transaction> transactions = new ArrayList<>();
@@ -52,7 +63,10 @@ public class ValidatorPassive {
 		}				
 		return bd;
 	}
-	
+	 /**
+	   * Validación de Monot AccountCurrent.
+	   * 
+	 */
 	public static Passive validateMontoAccountCurrent(Passive bd,Passive ps) {
 		BigDecimal montoAccountCurrent;
 		if (ps.getAccountCurrent().get(0).getTransactions().get(0).getTypeTransaction()
@@ -66,6 +80,10 @@ public class ValidatorPassive {
 		return bd;	
 	}
 	
+	/**
+	   * Validación de Monot AccountSavings.
+	   * 
+	 */
 	public static Passive validateMontoAccountSavings(Passive bd,Passive ps) {
 		BigDecimal montoAccountSaving;
 		if (ps.getAccountSavings().getTransactions().get(0).getTypeTransaction().equals(Constantes.DEPOSITO)) {

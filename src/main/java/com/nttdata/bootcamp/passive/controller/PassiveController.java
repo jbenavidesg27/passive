@@ -19,19 +19,28 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.nttdata.bootcamp.passive.model.Passive;
 import com.nttdata.bootcamp.passive.model.dto.PassiveDTO;
-import com.nttdata.bootcamp.passive.service.IPassiveService;
+import com.nttdata.bootcamp.passive.service.PassiveService;
 import com.nttdata.bootcamp.passive.util.Constantes;
 import com.nttdata.bootcamp.passive.validator.ValidatorPassive;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+/**
+ * Service Rest.
+ *
+ */
 @RestController
 @RequestMapping("/passive")
 public class PassiveController {
+
 	@Autowired
-	IPassiveService passiveService;
+	PassiveService passiveService;
 	
+/**
+ * Peticiones Rest.
+ * List all Passive.
+ */
 	@GetMapping
 	public Mono<ResponseEntity<Flux<Passive>>>  findAll(){
 		Flux<Passive> fx = passiveService.findAll();
@@ -39,7 +48,10 @@ public class PassiveController {
 				.contentType(MediaType.APPLICATION_JSON)
 				.body(fx));
 	}
-	
+	/**
+	   * List Passive for Id.
+	   * 
+	   */
 	@GetMapping("/{id}")
 	public Mono<ResponseEntity<Passive>> findById(@PathVariable("id") String id){
 		return passiveService.findById(id)
@@ -47,7 +59,10 @@ public class PassiveController {
 						.contentType(MediaType.APPLICATION_JSON)
 						.body(p));
 	}
-	
+	/**
+	   * Save Passive.
+	   * 
+	   */
 	@PostMapping
 	public Mono<ResponseEntity<Passive>> save(@RequestBody PassiveDTO passive, final ServerHttpRequest req){
 		ModelMapper mapper = new ModelMapper();
@@ -76,7 +91,10 @@ public class PassiveController {
 						.contentType(MediaType.APPLICATION_JSON)
 						.body(p));
 	}
-	
+	/**
+	   * Update Passive for Id.
+	   * 
+	   */
 	@PutMapping("/{id}")
 	public Mono<ResponseEntity<Passive>> update(@PathVariable("id") String id,@RequestBody PassiveDTO passive){
 		ModelMapper mapper = new ModelMapper();
