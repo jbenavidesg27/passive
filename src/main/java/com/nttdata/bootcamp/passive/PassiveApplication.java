@@ -9,7 +9,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
  *
  */
 @SpringBootApplication
-@EnableEurekaClient
+//@EnableEurekaClient
 public class PassiveApplication {
 
   public static void main(String[] args) {

@@ -1,15 +1,14 @@
 package com.nttdata.bootcamp.passive.validator;
 
 
-import com.nttdata.bootcamp.passive.model.AccountCurrent;
-import com.nttdata.bootcamp.passive.model.AccountSavings;
-import com.nttdata.bootcamp.passive.model.Passive;
-import com.nttdata.bootcamp.passive.model.Transaction;
-import com.nttdata.bootcamp.passive.util.Constantes;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import com.nttdata.bootcamp.passive.model.Passive;
+import com.nttdata.bootcamp.passive.model.Transaction;
+import com.nttdata.bootcamp.passive.util.Constantes;
 
 
 
