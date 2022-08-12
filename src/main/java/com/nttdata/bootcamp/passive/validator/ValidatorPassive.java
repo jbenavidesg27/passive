@@ -73,8 +73,15 @@ public class ValidatorPassive {
 			montoAccountCurrent = bd.getAccountCurrent().get(0).getAccount().add(ps.getAccountCurrent().get(0).getAccount());// Noncompliant
 			bd.getAccountCurrent().get(0).setAccount(montoAccountCurrent);
 		} else {
-			montoAccountCurrent = bd.getAccountCurrent().get(0).getAccount().subtract(ps.getAccountCurrent().get(0).getAccount());// Noncompliant
-			bd.getAccountCurrent().get(0).setAccount(montoAccountCurrent);
+			if ((bd.getAccountCurrent().get(0).getAccount().compareTo(ps.getAccountCurrent().get(0).getAccount()) == 0)
+					|| (bd.getAccountCurrent().get(0).getAccount()
+							.compareTo(ps.getAccountCurrent().get(0).getAccount()) == 1)) {
+				montoAccountCurrent = bd.getAccountCurrent().get(0).getAccount()
+						.subtract(ps.getAccountCurrent().get(0).getAccount());
+				bd.getAccountCurrent().get(0).setAccount(montoAccountCurrent);
+			}else {
+				 new Exception("Se excedió a la cantidad permitidad") ;
+			}
 		}		
 		return bd;	
 	}
@@ -86,11 +93,14 @@ public class ValidatorPassive {
 	public static Passive validateMontoAccountSavings(Passive bd,Passive ps) {
 		BigDecimal montoAccountSaving;
 		if (ps.getAccountSavings().getTransactions().get(0).getTypeTransaction().equals(Constantes.DEPOSITO)) {
-			montoAccountSaving = bd.getAccountSavings().getAccount().add(ps.getAccountSavings().getAccount());// Noncompliant
+			montoAccountSaving = bd.getAccountSavings().getAccount().add(ps.getAccountSavings().getAccount());
 			bd.getAccountSavings().setAccount(montoAccountSaving);
 		} else {
-			montoAccountSaving = bd.getAccountSavings().getAccount().subtract(ps.getAccountSavings().getAccount());// Noncompliant
-			bd.getAccountSavings().setAccount(montoAccountSaving);
+			if ((bd.getAccountSavings().getAccount().compareTo(ps.getAccountSavings().getAccount()) == 0)
+					|| (bd.getAccountSavings().getAccount().compareTo(ps.getAccountSavings().getAccount()) == 1)) {
+				montoAccountSaving = bd.getAccountSavings().getAccount().subtract(ps.getAccountSavings().getAccount());
+				bd.getAccountSavings().setAccount(montoAccountSaving);
+			}
 		}
 		return bd;
 	}
