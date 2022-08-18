@@ -28,7 +28,7 @@ import reactor.core.publisher.Mono;
 @WebFluxTest(controllers = PassiveController.class)
 @Import(PassiverServiceImpl.class)
 
-public class PassiveControllerTest {
+class PassiveControllerTest {
 	
 	@Autowired
 	WebTestClient webTestClient;

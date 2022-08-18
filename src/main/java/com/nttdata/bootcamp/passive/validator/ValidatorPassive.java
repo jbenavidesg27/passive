@@ -80,7 +80,7 @@ public class ValidatorPassive {
 						.subtract(ps.getAccountCurrent().get(0).getAccount());
 				bd.getAccountCurrent().get(0).setAccount(montoAccountCurrent);
 			}else {
-				 new Exception("Se excedió a la cantidad permitidad") ;
+				throw new IllegalArgumentException("EL saldo es insuficiente");
 			}
 		}		
 		return bd;	

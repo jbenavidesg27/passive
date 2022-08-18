@@ -19,7 +19,7 @@ import reactor.core.publisher.Mono;
  */
 @RestController
 @RequestMapping("/balance")
-public class balanceController {
+public class BalanceController {
 	
 	@Autowired
 	PassiveService passiveService;
