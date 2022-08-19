@@ -17,6 +17,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nttdata.bootcamp.passive.kafka.consumer.PersonConsumer;
+import com.nttdata.bootcamp.passive.kafka.producer.PassiveProducer;
 import com.nttdata.bootcamp.passive.model.Passive;
 import com.nttdata.bootcamp.passive.model.dto.PassiveDTO;
 import com.nttdata.bootcamp.passive.service.PassiveService;
@@ -37,6 +41,12 @@ public class PassiveController {
 	@Autowired
 	PassiveService passiveService;
 	
+	@Autowired
+	PassiveProducer passiveProducer;
+	
+	@Autowired
+	PersonConsumer personConsumer;
+	
 /**
  * Peticiones Rest.
  * List all Passive.
@@ -54,10 +64,23 @@ public class PassiveController {
 	   */
 	@GetMapping("/{id}")
 	public Mono<ResponseEntity<Passive>> findById(@PathVariable("id") String id){
-		return passiveService.findById(id)
+		return passiveService.findById(id)	
+				.flatMap(j -> {					
+					try {
+						ObjectMapper mapper = new ObjectMapper();
+						// Java objects to JSON string - compact-print
+				        String jsonString = mapper.writeValueAsString(j);
+						passiveProducer.sendMessage(jsonString);
+					} catch (JsonProcessingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					return Mono.just(j);
+				})
 				.map(p -> ResponseEntity.ok()
 						.contentType(MediaType.APPLICATION_JSON)
-						.body(p));
+						.body(p))
+				;
 	}
 	/**
 	   * Save Passive.
@@ -69,7 +92,12 @@ public class PassiveController {
 		Passive passiveModel = mapper.map(passive, Passive.class);
 		return Mono.just(passiveModel)
 				.flatMap(p -> {
-					
+					try {
+						p.setClient(personConsumer.consume(null));
+					} catch (JsonProcessingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					if(p.getClient().getDocuments().getDocumentType().equals(Constantes.TYPE_RUC)) {
 						if(Objects.nonNull(p.getAccountCurrent())) {
 							p.setAccountCurrent(p.getAccountCurrent());

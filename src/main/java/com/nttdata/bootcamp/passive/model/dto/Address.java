@@ -19,6 +19,7 @@ public class Address {
 	
 	
 	private String nameAddress;
+//	private String address;
 
 
 }
