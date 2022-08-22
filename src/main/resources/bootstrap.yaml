@@ -4,15 +4,22 @@ spring:
   data:
     mongodb:
       uri: mongodb://localhost:27017/passivedb
-  cloud:
-    config:
-      name: passive-service
-      discovery:
-        enabled: true
-        service-id: config
-eureka:
-  client:
-    register-with-eureka: true
-    fetch-registry: true
-    service-url:
-      default-zone: http://localhost:8761/eureka/
+  kafka:
+     consumer:
+#        bootstrap-servers: 192.168.1.14:9092
+        #group-id: fooGroup2
+        auto-offset-reset: earliest
+        key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+        value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#  cloud:
+#    config:
+#      name: passive-service
+#      discovery:
+#        enabled: true
+#        service-id: config
+#eureka:
+#  client:
+#    register-with-eureka: true
+#    fetch-registry: true
+#    service-url:
+#      default-zone: http://localhost:8761/eureka/

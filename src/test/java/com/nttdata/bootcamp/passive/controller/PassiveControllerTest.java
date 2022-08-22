@@ -29,6 +29,7 @@ import reactor.core.publisher.Mono;
 @WebFluxTest(controllers = PassiveController.class)
 @Import(PassiverServiceImpl.class)
 
+<<<<<<< HEAD
 public class PassiveControllerTest {
   
   @Autowired
@@ -41,6 +42,20 @@ public class PassiveControllerTest {
   void findAll() {
     Passive passive = new Passive();
     passive.setId("1");
+=======
+class PassiveControllerTest {
+	
+	@Autowired
+	WebTestClient webTestClient;
+	
+	@MockBean
+	private PassiveDao passiveDao;
+	
+	@Test
+	void findAll() {
+		Passive passive = new Passive();
+		passive.setId("1");
+>>>>>>> 0d1b6fae522710a8a6bfb6f6341a9da446617744
         
     Passive passive2 = new Passive();
     passive2.setId("2");

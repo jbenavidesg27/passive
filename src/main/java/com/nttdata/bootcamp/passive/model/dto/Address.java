@@ -1,6 +1,7 @@
 package com.nttdata.bootcamp.passive.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,7 @@ public class Address {
 	
 	
 	private String nameAddress;
+//	private String address;
 
 
 }

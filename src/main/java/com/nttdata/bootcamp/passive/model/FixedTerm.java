@@ -1,7 +1,9 @@
 package com.nttdata.bootcamp.passive.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
