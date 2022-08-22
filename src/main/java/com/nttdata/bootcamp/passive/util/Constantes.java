@@ -6,6 +6,7 @@ import java.math.BigDecimal;
  * Constantes.
  *
  */
+
 public class Constantes {	
 	
 	public static final String DEPOSITO = "1";
@@ -26,4 +27,5 @@ public class Constantes {
 	private Constantes() {
 		
 	}
+
 }

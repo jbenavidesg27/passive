@@ -34,16 +34,17 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/passive")
 public class PassiveController {
 
-	@Autowired
-	PassiveService passiveService;
-	
-	
-	
-	
+
+  @Autowired
+  PassiveService passiveService;
+  
+
 /**
  * Peticiones Rest.
  * List all Passive.
  */
+
+
 	@GetMapping
 	public Mono<ResponseEntity<Flux<Passive>>>  findAll(){
 		Flux<Passive> fx = passiveService.findAll();
