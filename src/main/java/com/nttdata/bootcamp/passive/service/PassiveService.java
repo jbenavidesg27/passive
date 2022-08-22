@@ -1,5 +1,7 @@
 package com.nttdata.bootcamp.passive.service;
 
+import com.nttdata.bootcamp.common.event.AccountEvent;
+import com.nttdata.bootcamp.common.event.PersonEvent;
 import com.nttdata.bootcamp.passive.model.Passive;
 
 import reactor.core.publisher.Flux;
@@ -17,5 +19,9 @@ public interface PassiveService {
   Flux<Passive> findAll();
   
   Mono<Passive> findById(String id);
+  
+  AccountEvent newAccountEvent(Passive personEvent);
+
+  void cancelAccountEvent(PersonEvent personEvent);
 
 }

@@ -32,31 +32,31 @@ public class ValidatorPassive {
 		
 		List<Transaction> transactions = new ArrayList<>();
 		if (Objects.nonNull(ps.getAccountCurrent())) {
-			if (bd.getClient().getDocuments().getDocumentType().equals(Constantes.TYPE_DNI)
+			if (bd.getPerson().getDocuments().getDocumentType().equals(Constantes.TYPE_DNI)
 					&& Boolean.TRUE.equals(bd.getFlagCurrent())) {
 				Passive bdAccountCurrent = validateMontoAccountCurrent(bd,ps);
 				bdAccountCurrent.getAccountCurrent().get(0).getTransactions().stream().forEach(p -> transactions.add(p));
 				transactions.add(ps.getAccountCurrent().get(0).getTransactions().get(0));
 				bdAccountCurrent.getAccountCurrent().get(0).setTransactions(transactions);
 				bd.setAccountCurrent(bdAccountCurrent.getAccountCurrent());
-				bd.setClient(bd.getClient());
+				bd.setPerson(bd.getPerson());
 			} else {
 				bd.setAccountCurrent(ps.getAccountCurrent());
-				bd.setClient(bd.getClient());
+				bd.setPerson(bd.getPerson());
 				bd.setFlagCurrent(ps.getFlagCurrent());
 			}
 		} else {
-			if (bd.getClient().getDocuments().getDocumentType().equals(Constantes.TYPE_DNI)
+			if (bd.getPerson().getDocuments().getDocumentType().equals(Constantes.TYPE_DNI)
 					&& Boolean.TRUE.equals(bd.getFlagSavings())) {
 				Passive bdAccountSavings = validateMontoAccountSavings(bd,ps);				
 				bdAccountSavings.getAccountSavings().getTransactions().stream().forEach(p -> transactions.add(p));
 				transactions.add(ps.getAccountSavings().getTransactions().get(0));
 				bdAccountSavings.getAccountSavings().setTransactions(transactions);
 				bd.setAccountSavings(bdAccountSavings.getAccountSavings());
-				bd.setClient(bd.getClient());
+				bd.setPerson(bd.getPerson());
 			} else {
 				bd.setAccountSavings(ps.getAccountSavings());
-				bd.setClient(bd.getClient());
+				bd.setPerson(bd.getPerson());
 				bd.setFlagSavings(ps.getFlagSavings());
 			}
 		}				

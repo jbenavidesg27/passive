@@ -6,6 +6,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.nttdata.bootcamp.common.event.AccountStatus;
+import com.nttdata.bootcamp.common.event.PersonStatus;
 import com.nttdata.bootcamp.passive.model.dto.Client;
 
 import lombok.AllArgsConstructor;
@@ -35,7 +37,11 @@ public class Passive {
   
   private FixedTerm fixedTerm;
   
-  private Client client;
+  private Client person;
+  
+  private PersonStatus personStatus;
+  
+  private AccountStatus accountStatus;
   
 
 }

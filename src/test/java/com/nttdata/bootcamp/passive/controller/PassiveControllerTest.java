@@ -72,7 +72,7 @@ class PassiveControllerTest {
 		  client.setDocuments(documents);
 		  Passive passive = new Passive();
 		  passive.setId("1");
-		  passive.setClient(client);
+		  passive.setPerson(client);
 		  Mockito.when(passiveDao.save(any())).thenReturn(Mono.just(passive));
 		  webTestClient.post()
 	                .uri("/passive")
@@ -94,7 +94,7 @@ class PassiveControllerTest {
 		  client.setDocuments(documents);
 		  Passive passive = new Passive();
 		  passive.setId("1");
-		  passive.setClient(client);
+		  passive.setPerson(client);
 		  Mockito.when(passiveDao.findById("1")).thenReturn(Mono.just(passive));
 		  Mockito.when(passiveDao.save(any())).thenReturn(Mono.just(passive));
 		  webTestClient.put()

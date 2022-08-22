@@ -1,7 +1,5 @@
 package com.nttdata.bootcamp.passive.model.dto;
 
-import java.util.List;
-
 import org.springframework.data.annotation.Id;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -26,12 +24,8 @@ public class Client {
   
   private String typePerson;
   
-  private List<Address> address;
-  
   private Documents documents;
   
-  private PersonLegal personLegal;
-  
-  private PersonNatural personNatural;
+  private Persons client;
 
 }

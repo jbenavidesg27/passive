@@ -8,6 +8,7 @@ import com.nttdata.bootcamp.passive.model.Passive;
  * DAO Passive.
  *
  */
+
 public interface PassiveDao extends ReactiveMongoRepository<Passive, String> {
 
 }

@@ -1,25 +1,25 @@
 package com.nttdata.bootcamp.passive.kafka.producer;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.stereotype.Component;
+import java.util.function.Supplier;
 
-@Component
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import com.nttdata.bootcamp.common.event.AccountEvent;
+
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Sinks;
+
+@Configuration
 public class PassiveProducer {
+	@Bean
+    public Sinks.Many<AccountEvent> personSinks(){
+        return Sinks.many().multicast().onBackpressureBuffer();
+    }
 
-	private static final Logger log = LoggerFactory.getLogger(PassiveProducer.class.getName());
-
-	private final KafkaTemplate<String, String> kafkaTemplate;
-
-	public PassiveProducer(@Qualifier("kafkaStringTemplate") KafkaTemplate<String, String> kafkaTemplate) {
-		this.kafkaTemplate = kafkaTemplate;
-	}
-
-	public void sendMessage(String message) {
-		log.info("Producing message {}", message);
-		this.kafkaTemplate.send("passive-topic", message);
-	}
+    @Bean
+    public Supplier<Flux<AccountEvent>> accountPassiveConsumer(Sinks.Many<AccountEvent> sinks){
+       return sinks::asFlux;
+    }
 
 }
